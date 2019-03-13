@@ -8,12 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		52FC37C3222D8C5300577200 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FC37C2222D8C5300577200 /* AppDelegate.swift */; };
-		52FC37C5222D8C5300577200 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FC37C4222D8C5300577200 /* ViewController.swift */; };
+		52FC37C5222D8C5300577200 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FC37C4222D8C5300577200 /* HomeController.swift */; };
 		52FC37C8222D8C5300577200 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52FC37C6222D8C5300577200 /* Main.storyboard */; };
 		52FC37CA222D8C5400577200 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52FC37C9222D8C5400577200 /* Assets.xcassets */; };
 		52FC37CD222D8C5400577200 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52FC37CB222D8C5400577200 /* LaunchScreen.storyboard */; };
 		52FC37D8222D8C5400577200 /* SwipeMatchFirestoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FC37D7222D8C5400577200 /* SwipeMatchFirestoreTests.swift */; };
 		52FC37E3222D8C5400577200 /* SwipeMatchFirestoreUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FC37E2222D8C5400577200 /* SwipeMatchFirestoreUITests.swift */; };
+		52FC37F3222D8EF200577200 /* UIView-Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FC37F2222D8EF200577200 /* UIView-Ext.swift */; };
+		52FC37F5222D8EF900577200 /* UIColor-Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FC37F4222D8EF900577200 /* UIColor-Ext.swift */; };
+		52FC37F92230278800577200 /* HomeBottomControlsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FC37F82230278800577200 /* HomeBottomControlsStackView.swift */; };
+		52FC37FB22302C3A00577200 /* TopNavigationStackViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FC37FA22302C3A00577200 /* TopNavigationStackViews.swift */; };
+		52FC37FD2230325900577200 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FC37FC2230325900577200 /* CardView.swift */; };
+		52FC3800223541BE00577200 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FC37FF223541BE00577200 /* User.swift */; };
+		52FC38032236CA4100577200 /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FC38022236CA4100577200 /* CardViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +43,7 @@
 /* Begin PBXFileReference section */
 		52FC37BF222D8C5300577200 /* SwipeMatchFirestore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwipeMatchFirestore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52FC37C2222D8C5300577200 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		52FC37C4222D8C5300577200 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		52FC37C4222D8C5300577200 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		52FC37C7222D8C5300577200 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		52FC37C9222D8C5400577200 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		52FC37CC222D8C5400577200 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -47,6 +54,13 @@
 		52FC37DE222D8C5400577200 /* SwipeMatchFirestoreUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwipeMatchFirestoreUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		52FC37E2222D8C5400577200 /* SwipeMatchFirestoreUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeMatchFirestoreUITests.swift; sourceTree = "<group>"; };
 		52FC37E4222D8C5400577200 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		52FC37F2222D8EF200577200 /* UIView-Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView-Ext.swift"; sourceTree = "<group>"; };
+		52FC37F4222D8EF900577200 /* UIColor-Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor-Ext.swift"; sourceTree = "<group>"; };
+		52FC37F82230278800577200 /* HomeBottomControlsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBottomControlsStackView.swift; sourceTree = "<group>"; };
+		52FC37FA22302C3A00577200 /* TopNavigationStackViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopNavigationStackViews.swift; sourceTree = "<group>"; };
+		52FC37FC2230325900577200 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		52FC37FF223541BE00577200 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		52FC38022236CA4100577200 /* CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,8 +111,12 @@
 		52FC37C1222D8C5300577200 /* SwipeMatchFirestore */ = {
 			isa = PBXGroup;
 			children = (
+				52FC38012236CA2600577200 /* ViewModel */,
+				52FC37FE223541A600577200 /* Model */,
+				52FC37F7223026F600577200 /* Views */,
+				52FC37F6222EE17600577200 /* Controller */,
+				52FC37F1222D8EAC00577200 /* Extension */,
 				52FC37C2222D8C5300577200 /* AppDelegate.swift */,
-				52FC37C4222D8C5300577200 /* ViewController.swift */,
 				52FC37C6222D8C5300577200 /* Main.storyboard */,
 				52FC37C9222D8C5400577200 /* Assets.xcassets */,
 				52FC37CB222D8C5400577200 /* LaunchScreen.storyboard */,
@@ -123,6 +141,49 @@
 				52FC37E4222D8C5400577200 /* Info.plist */,
 			);
 			path = SwipeMatchFirestoreUITests;
+			sourceTree = "<group>";
+		};
+		52FC37F1222D8EAC00577200 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				52FC37F4222D8EF900577200 /* UIColor-Ext.swift */,
+				52FC37F2222D8EF200577200 /* UIView-Ext.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		52FC37F6222EE17600577200 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				52FC37C4222D8C5300577200 /* HomeController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		52FC37F7223026F600577200 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				52FC37F82230278800577200 /* HomeBottomControlsStackView.swift */,
+				52FC37FA22302C3A00577200 /* TopNavigationStackViews.swift */,
+				52FC37FC2230325900577200 /* CardView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		52FC37FE223541A600577200 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				52FC37FF223541BE00577200 /* User.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		52FC38012236CA2600577200 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				52FC38022236CA4100577200 /* CardViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -256,8 +317,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				52FC37C5222D8C5300577200 /* ViewController.swift in Sources */,
+				52FC37FD2230325900577200 /* CardView.swift in Sources */,
+				52FC37F3222D8EF200577200 /* UIView-Ext.swift in Sources */,
+				52FC37FB22302C3A00577200 /* TopNavigationStackViews.swift in Sources */,
+				52FC37C5222D8C5300577200 /* HomeController.swift in Sources */,
+				52FC3800223541BE00577200 /* User.swift in Sources */,
+				52FC37F92230278800577200 /* HomeBottomControlsStackView.swift in Sources */,
 				52FC37C3222D8C5300577200 /* AppDelegate.swift in Sources */,
+				52FC37F5222D8EF900577200 /* UIColor-Ext.swift in Sources */,
+				52FC38032236CA4100577200 /* CardViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
