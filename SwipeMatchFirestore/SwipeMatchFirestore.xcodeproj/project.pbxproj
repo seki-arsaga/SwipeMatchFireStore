@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		52DC37CD223D2CFA0044948B /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DC37CC223D2CFA0044948B /* Advertiser.swift */; };
 		52FC37C3222D8C5300577200 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FC37C2222D8C5300577200 /* AppDelegate.swift */; };
 		52FC37C5222D8C5300577200 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FC37C4222D8C5300577200 /* HomeController.swift */; };
 		52FC37C8222D8C5300577200 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52FC37C6222D8C5300577200 /* Main.storyboard */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		52DC37CC223D2CFA0044948B /* Advertiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertiser.swift; sourceTree = "<group>"; };
 		52FC37BF222D8C5300577200 /* SwipeMatchFirestore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwipeMatchFirestore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52FC37C2222D8C5300577200 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52FC37C4222D8C5300577200 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				52FC37FF223541BE00577200 /* User.swift */,
+				52DC37CC223D2CFA0044948B /* Advertiser.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -317,6 +320,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52DC37CD223D2CFA0044948B /* Advertiser.swift in Sources */,
 				52FC37FD2230325900577200 /* CardView.swift in Sources */,
 				52FC37F3222D8EF200577200 /* UIView-Ext.swift in Sources */,
 				52FC37FB22302C3A00577200 /* TopNavigationStackViews.swift in Sources */,

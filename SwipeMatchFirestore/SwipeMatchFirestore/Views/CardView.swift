@@ -10,14 +10,43 @@ import UIKit
 
 class CardView: UIView {
 
-    let imageView = UIImageView(image: #imageLiteral(resourceName: "harden_image"))
-    let informationLabel = UILabel()
+    var cardViewModel: CardViewModel! {
+        didSet {
+            imageView.image = UIImage(named: cardViewModel.imageName)
+            informationLabel.attributedText = cardViewModel.attributedString
+            informationLabel.textAlignment = cardViewModel.textAlignment
+        }
+    }
+    
+    //encapsulation
+    fileprivate let imageView = UIImageView(image: #imageLiteral(resourceName: "harden_image"))
+    fileprivate let gradientLayer = CAGradientLayer()
+    fileprivate let informationLabel = UILabel()
     
     // Configurations
     let threshold: CGFloat = 80
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupLayout()
+        
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        addGestureRecognizer(panGesture)
+    }
+    
+    fileprivate func setupGradientLayer() {
+        gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
+        gradientLayer.locations = [0.5, 1.1]
+        
+        layer.addSublayer(gradientLayer)
+    }
+    
+    override func layoutSubviews() {
+        // in here you know what tou CardView frame will be
+        gradientLayer.frame = self.frame
+    }
+    
+    fileprivate func setupLayout() {
         layer.cornerRadius = 15
         clipsToBounds = true
         
@@ -25,27 +54,22 @@ class CardView: UIView {
         addSubview(imageView)
         imageView.fillSuperview()
         
+        //add a gradient layer somehow
+        setupGradientLayer()
         addSubview(informationLabel)
+        informationLabel.anchor(top: nil, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor, padding: .init(top: 0, left: 16, bottom: 16, right: 16))
         
-        informationLabel.numberOfLines = 0
-        informationLabel.translatesAutoresizingMaskIntoConstraints = false
-        [
-            informationLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            informationLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            informationLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            ].forEach{ $0.isActive = true }
-        informationLabel.text = "TEST NAME TEST NAME AGE"
-        informationLabel.font = UIFont.systemFont(ofSize: 34, weight: .heavy)
+        
         informationLabel.textColor = UIColor.white
-//        informationLabel.isLayoutMarginsRelativeArrangement = true
-        informationLabel.layoutMargins = .init(top: 0, left: 16, bottom: 16, right: 16)
-        
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-        addGestureRecognizer(panGesture)
+        informationLabel.numberOfLines = 0
     }
     
     @objc fileprivate func handlePan(gesture: UIPanGestureRecognizer) {
         switch gesture.state {
+        case .began:
+            superview?.subviews.forEach({ (subview) in
+                subview.layer.removeAllAnimations()
+            })
         case .changed:
             handleChanged(gesture)
         case .ended:
@@ -57,8 +81,8 @@ class CardView: UIView {
     
     fileprivate func handleChanged(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: nil)
-        let degreea: CGFloat = translation.x / 20
-        let angle = degreea * .pi / 100
+        let degree: CGFloat = translation.x / 20
+        let angle = degree * .pi / 100
         
         let rotationalTransformation = CGAffineTransform(rotationAngle: angle)
         self.transform = rotationalTransformation.translatedBy(x: translation.x, y: translation.y)
