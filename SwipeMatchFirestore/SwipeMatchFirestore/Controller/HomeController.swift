@@ -14,10 +14,6 @@ class HomeController: UIViewController {
     let cardDeckView = UIView()
     let bottomsStackView = HomeBottomControlsStackView()
     
-//    let users = [
-//        User(name: "Kelly", age: 23, profession: "music DJ", imageName: "harden_image"),
-//        User(name: "Jane", age: 18, profession: "Teacher", imageName: "curry_image")
-//    ]
     
     let cardViewModels: [CardViewModel] = {
         let producers = [
@@ -33,11 +29,20 @@ class HomeController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        topStackView.settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
+        
         view.backgroundColor = .white
         setupLayout()
         setupDummyCards()
     }
-
+    
+    @objc func handleSettings() {
+        print("Show register page")
+        
+        let vc = RegistrationController()
+        present(vc, animated: true, completion: nil)
+    }
+    
     fileprivate func setupDummyCards() {
         cardViewModels.forEach { (cardVM) in
             let cardView = CardView(frame: .zero)
@@ -45,21 +50,6 @@ class HomeController: UIViewController {
             cardDeckView.addSubview(cardView)
             cardView.fillSuperview()
         }
-        
-//        users.forEach { (user) in
-//            let cardView = CardView(frame: .zero)
-//            cardView.imageView.image = UIImage(named: user.imageName)
-////            cardView.informationLabel.text = "\(user.name) \(user.age) \n \(user.profession)"
-////
-////            let attributedText = NSMutableAttributedString(string: user.name, attributes: [.font: UIFont.systemFont(ofSize: 32, weight: .heavy)])
-////            attributedText.append(NSAttributedString(string: " \(user.age)", attributes: [.font: UIFont.systemFont(ofSize: 24, weight: .regular)]))
-////            attributedText.append(NSAttributedString(string: " \n\(user.profession)", attributes: [.font: UIFont.systemFont(ofSize: 20, weight: .regular)]))
-//
-//            cardView.informationLabel.attributedText = attributedText
-//
-//            cardDeckView.addSubview(cardView)
-//            cardView.fillSuperview()
-//        }
     }
     
     //MARK:- Fileprivate
