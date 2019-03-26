@@ -7,20 +7,46 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
+import FirebaseStorage
+import JGProgressHUD
 
-class RegistrationController: UIViewController {
+extension RegistrationController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let image = info[.originalImage] as? UIImage
+        registerationViewModel.bindableImage.value = image
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true)
+    }
+}
+
+class RegistrationController: UIViewController  {
     
     //UI Component
     let selectPhotoButon: UIButton = {
-       let button = UIButton(type: .system)
+        let button = UIButton(type: .system)
         button.setTitle("Select photo", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 32, weight: .heavy)
         button.backgroundColor = .white
         button.setTitleColor(.black, for: .normal)
         button.heightAnchor.constraint(equalToConstant: 275).isActive = true
         button.layer.cornerRadius = 16
+        button.addTarget(self, action: #selector(handleSelectedPhoto), for: .touchUpInside)
+        button.imageView?.contentMode = .scaleAspectFill
+        button.clipsToBounds = true
         return button
     }()
+    
+    @objc fileprivate func handleSelectedPhoto() {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        present(picker, animated: true, completion: nil)
+    }
     
     let fullNameTextField: CustomTextField = {
         let tf = CustomTextField(padding: 16)
@@ -49,8 +75,8 @@ class RegistrationController: UIViewController {
         return tf
     }()
     
-    let registerButton: UIButton = {
-       let button = UIButton(type: .system)
+    lazy var registerButton: UIButton = {
+        let button = UIButton(type: .system)
         button.setTitle("Register", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .heavy)
         button.setTitleColor(.white, for: .normal)
@@ -59,8 +85,29 @@ class RegistrationController: UIViewController {
         button.heightAnchor.constraint(equalToConstant: 44).isActive = true
         button.isEnabled = false
         button.layer.cornerRadius = 22
+        button.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         return button
     }()
+    
+    let registeringHUD = JGProgressHUD(style: .dark)
+    @objc fileprivate func handleRegister() {
+        self.view.endEditing(true)
+        registerationViewModel.performRegistration { [unowned self] (err) in
+            if let err = err {
+                self.showHUDWithError(error: err)
+                return
+            }
+        }
+    }
+    
+    fileprivate func showHUDWithError(error: Error) {
+        registeringHUD.dismiss()
+        let hud = JGProgressHUD(style: .dark)
+        hud.textLabel.text = "Failed registration"
+        hud.detailTextLabel.text = error.localizedDescription
+        hud.show(in: self.view)
+        hud.dismiss(afterDelay: 4)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,7 +120,7 @@ class RegistrationController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
+        //        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK:- FilePrivate
@@ -89,8 +136,8 @@ class RegistrationController: UIViewController {
     
     let registerationViewModel = RegistrationViewModel()
     fileprivate func setupRegistrationViewModelObserver() {
-        registerationViewModel.isFormValidObservar = { [unowned self] (isFormValid) in
-            
+        registerationViewModel.bindableIsFormValid.bind { [unowned self] (isFormvalid) in
+            guard let isFormValid = isFormvalid else { return }
             self.registerButton.isEnabled = isFormValid
             if isFormValid {
                 self.registerButton.setTitleColor(.white, for: .normal)
@@ -100,6 +147,19 @@ class RegistrationController: UIViewController {
                 self.registerButton.setTitleColor(.gray, for: .disabled)
             }
         }
+        registerationViewModel.bindableImage.bind { [unowned self]  (img) in
+            self.selectPhotoButon.setImage(img?.withRenderingMode(.alwaysOriginal), for: .normal)
+        }
+        
+        registerationViewModel.bindableIsRegistering.bind { [unowned self] (isRegistering) in
+            if isRegistering == true {
+                self.registeringHUD.textLabel.text = "Register"
+                self.registeringHUD.show(in: self.view)
+            } else {
+                self.registeringHUD.dismiss()
+            }
+        }
+        
     }
     
     fileprivate func setupNotificationObservers() {
@@ -128,7 +188,7 @@ class RegistrationController: UIViewController {
     }
     
     lazy var verticalStackView: UIStackView = {
-       let sv = UIStackView(arrangedSubviews: [fullNameTextField, emailTextField, passwordTextField, registerButton])
+        let sv = UIStackView(arrangedSubviews: [fullNameTextField, emailTextField, passwordTextField, registerButton])
         sv.axis = .vertical
         sv.distribution = .fillEqually
         sv.spacing = 8
@@ -155,7 +215,7 @@ class RegistrationController: UIViewController {
     }
     
     let gradientLayer = CAGradientLayer()
-
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         

@@ -6,12 +6,13 @@ target 'SwipeMatchFirestore' do
   use_frameworks!
 
   # Pods for SwipeMatchFirestore
-  
-  pod 'Firebase/Auth’
-  pod 'Firebase/Storage’
-  pod 'Firebase/Core’
-  pod 'Firebase/Firestore’,’~>5.10.0’
-  pod 'SDWebImage'
-  pod 'JGProgressHUD'
+
+pod 'BoringSSL'
+pod 'Firebase/Firestore’
+pod 'Firebase/Auth’
+pod 'Firebase/Storage’
+pod 'Firebase/Core’
+pod 'SDWebImage','~>4.4.2’
+pod 'JGProgressHUD','~>2.0.3'
 
 end
