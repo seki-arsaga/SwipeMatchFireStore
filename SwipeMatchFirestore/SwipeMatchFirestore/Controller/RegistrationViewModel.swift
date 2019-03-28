@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseStorage
+import FirebaseFirestore
 
 class RegistrationViewModel {
 
@@ -29,27 +30,50 @@ class RegistrationViewModel {
                 completion(err)
                 return
             }
+            self.saveImageToFirebase(completion: completion)
+        }
+    }
+
+    fileprivate func saveImageToFirebase(completion: @escaping (Error?) -> ()) {
+        let filename = UUID().uuidString
+        let ref = Storage.storage().reference(withPath: "/images/\(filename)")
+        let imageData = self.bindableImage.value?.jpegData(compressionQuality: 0.75) ?? Data()
+        ref.putData(imageData, metadata: nil, completion: { (_, err) in
             
-            let filename = UUID().uuidString
-            let ref = Storage.storage().reference(withPath: "/images/\(filename)")
-            let imageData = self.bindableImage.value?.jpegData(compressionQuality: 0.75) ?? Data()
-            ref.putData(imageData, metadata: nil, completion: { (_, err) in
-                
+            if let err = err {
+                completion(err)
+                return
+            }
+            
+            ref.downloadURL(completion: { (url, err) in
                 if let err = err {
                     completion(err)
                     return
                 }
+                self.bindableIsRegistering.value = false
                 
-                let downloadUrl = ref.downloadURL(completion: { (url, err) in
-                    if let err = err {
-                        completion(err)
-                        return
-                    }
-                    self.bindableIsRegistering.value = false
-                })
+                let imageUrl = url?.absoluteString ?? ""
+                self.saveInfoToFireStore(imageUrl: imageUrl, completion: completion )
+                
             })
-        }
+        })
     }
+    
+    fileprivate func saveInfoToFireStore(imageUrl: String, completion: @escaping (Error?) -> ()) {
+        let uid = Auth.auth().currentUser?.uid ?? ""
+        let docData = ["fullName": fullName ?? "", "uid": uid, "imageUrl1": imageUrl]
+        
+        Firestore.firestore().collection("users").document(uid).setData(docData) { (err) in
+            if let err = err {
+                completion(err)
+                return
+            }
+            
+            completion(nil)
+        }
+        
+    }
+    
     
     fileprivate func checkFormValidity() {
         let isFormValid = fullName?.isEmpty == false && email?.isEmpty == false && password?.isEmpty == false
