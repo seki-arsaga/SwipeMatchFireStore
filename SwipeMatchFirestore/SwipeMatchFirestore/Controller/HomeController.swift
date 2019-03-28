@@ -8,24 +8,13 @@
 
 import UIKit
 import FirebaseFirestore
+import JGProgressHUD
 
 class HomeController: UIViewController {
 
     let topStackView = TopNavigationStackViews()
     let cardDeckView = UIView()
-    let bottomsStackView = HomeBottomControlsStackView()
-    
-    
-//    let cardViewModels: [CardViewModel] = {
-//        let producers = [
-//            User(name: "Kelly", age: 23, profession: "music DJ", imageNames: ["harden_image-1", "harden_image-2", "harden_image-3"]),
-//            User(name: "Jane", age: 18, profession: "Teacher", imageNames: ["curry_image-1", "curry_image-2", "curry_image-3"]),
-//            Advertiser(title: "Side Out Menu", brandName: "Lets Build That App", posterPhotoName: "nab-playoffs"),
-//            User(name: "Jane", age: 18, profession: "Teacher", imageNames: ["curry_image-1", "curry_image-2", "curry_image-3"]),
-//        ] as [ProducesCardViewModel]
-//       let viewModels = producers.map({return $0.toCardViewModel()})
-//        return viewModels
-//    }()
+    let bottomsControls = HomeBottomControlsStackView()
 
     var cardViewModels = [CardViewModel]()
     
@@ -33,6 +22,7 @@ class HomeController: UIViewController {
         super.viewDidLoad()
         
         topStackView.settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
+        bottomsControls.refreshButton.addTarget(self, action: #selector(handleRefresh), for: .touchUpInside)
         
         view.backgroundColor = .white
         setupLayout()
@@ -40,11 +30,22 @@ class HomeController: UIViewController {
         fetchUsersFromFirestore()
     }
     
+    @objc fileprivate func handleRefresh() {
+        fetchUsersFromFirestore()
+    }
+    
+    var lastFetchedUser: User?
+    
     fileprivate func fetchUsersFromFirestore() {
-        let query = Firestore.firestore().collection("users")
+        let hud = JGProgressHUD(style: .dark)
+        hud.textLabel.text = "Fetching Users"
+        hud.show(in: view)
+        
+        let query = Firestore.firestore().collection("users").order(by: "uid").start(after: [lastFetchedUser?.uid ?? ""]).limit(to: 2)
 //        let query = Firestore.firestore().collection("users").whereField("age", isLessThan: 31).whereField("age", isGreaterThan: 23)
         
         query.getDocuments { (snapshot, err) in
+            hud.dismiss()
             if let err = err {
                 print("Failed to fetch users: ", err)
                 return
@@ -54,16 +55,24 @@ class HomeController: UIViewController {
                 let userDictionary = documentSnapshot.data()
                 let user = User(dictionary: userDictionary)
                 self.cardViewModels.append(user.toCardViewModel())
+                self.lastFetchedUser = user
+                self.setupCardFromUser(user: user)
             })
-            self.setupFirestoreUserCards()
         }
     }
     
+    fileprivate func setupCardFromUser(user: User) {
+        let cardView = CardView(frame: .zero)
+        cardView.cardViewModel = user.toCardViewModel()
+        cardDeckView.addSubview(cardView)
+        cardDeckView.sendSubviewToBack(cardView)
+        cardView.fillSuperview()
+    }
+    
     @objc func handleSettings() {
-        print("Show register page")
-        
-        let vc = RegistrationController()
-        present(vc, animated: true, completion: nil)
+        let settingsController = SettingsController()
+        let navController = UINavigationController(rootViewController: settingsController)
+        present(navController, animated: true, completion: nil)
     }
     
     fileprivate func setupFirestoreUserCards() {
@@ -78,7 +87,7 @@ class HomeController: UIViewController {
     //MARK:- Fileprivate
     
     fileprivate func setupLayout() {
-        let overallStackView = UIStackView(arrangedSubviews: [topStackView, cardDeckView, bottomsStackView])
+        let overallStackView = UIStackView(arrangedSubviews: [topStackView, cardDeckView, bottomsControls])
         overallStackView.axis = .vertical
         
         view.addSubview(overallStackView)

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		5214D7DC2249472C00C28EFE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5214D7DB2249472C00C28EFE /* GoogleService-Info.plist */; };
 		522F90BA224A7C120029E041 /* Bindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522F90B9224A7C110029E041 /* Bindable.swift */; };
+		522F90BC224D11520029E041 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522F90BB224D11520029E041 /* SettingsController.swift */; };
+		522F90BE224D1BE40029E041 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522F90BD224D1BE40029E041 /* SettingsCell.swift */; };
 		52DC37CD223D2CFA0044948B /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DC37CC223D2CFA0044948B /* Advertiser.swift */; };
 		52DC37CF2243AFE80044948B /* RegistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DC37CE2243AFE80044948B /* RegistrationController.swift */; };
 		52DC37D12243B5B50044948B /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DC37D02243B5B50044948B /* CustomTextField.swift */; };
@@ -52,6 +54,8 @@
 		374CE1A2320C137E65659FD8 /* Pods_SwipeMatchFirestoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwipeMatchFirestoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5214D7DB2249472C00C28EFE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		522F90B9224A7C110029E041 /* Bindable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bindable.swift; sourceTree = "<group>"; };
+		522F90BB224D11520029E041 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
+		522F90BD224D1BE40029E041 /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
 		52DC37CC223D2CFA0044948B /* Advertiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertiser.swift; sourceTree = "<group>"; };
 		52DC37CE2243AFE80044948B /* RegistrationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationController.swift; sourceTree = "<group>"; };
 		52DC37D02243B5B50044948B /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
@@ -181,6 +185,7 @@
 				52DC37CE2243AFE80044948B /* RegistrationController.swift */,
 				52DC37D22247D6530044948B /* RegistrationViewModel.swift */,
 				522F90B9224A7C110029E041 /* Bindable.swift */,
+				522F90BB224D11520029E041 /* SettingsController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -192,6 +197,7 @@
 				52FC37FA22302C3A00577200 /* TopNavigationStackViews.swift */,
 				52FC37FC2230325900577200 /* CardView.swift */,
 				52DC37D02243B5B50044948B /* CustomTextField.swift */,
+				522F90BD224D1BE40029E041 /* SettingsCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -414,6 +420,7 @@
 				52FC37FB22302C3A00577200 /* TopNavigationStackViews.swift in Sources */,
 				52FC37C5222D8C5300577200 /* HomeController.swift in Sources */,
 				52FC3800223541BE00577200 /* User.swift in Sources */,
+				522F90BC224D11520029E041 /* SettingsController.swift in Sources */,
 				52DC37CF2243AFE80044948B /* RegistrationController.swift in Sources */,
 				52FC37F92230278800577200 /* HomeBottomControlsStackView.swift in Sources */,
 				522F90BA224A7C120029E041 /* Bindable.swift in Sources */,
@@ -421,6 +428,7 @@
 				52DC37D32247D6530044948B /* RegistrationViewModel.swift in Sources */,
 				52FC37C3222D8C5300577200 /* AppDelegate.swift in Sources */,
 				52FC37F5222D8EF900577200 /* UIColor-Ext.swift in Sources */,
+				522F90BE224D1BE40029E041 /* SettingsCell.swift in Sources */,
 				52FC38032236CA4100577200 /* CardViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
