@@ -9,22 +9,63 @@
 import UIKit
 import Firebase
 import FirebaseFirestore
+import FirebaseStorage
 import FirebaseAuth
 import JGProgressHUD
 import SDWebImage
 
+protocol SettingsControllerDelegation {
+    func didSaveSettings()
+}
+
 class CustomImagePickerController: UIImagePickerController {
-    
     var imageButton: UIButton?
-    
 }
 
 extension SettingsController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let selectedImage = info[.originalImage] as? UIImage
-        let imageButton = (picker as? CustomImagePickerController)?.imageButton?.setImage(selectedImage?.withRenderingMode(.alwaysOriginal), for: .normal)
+        let imageButton = (picker as? CustomImagePickerController)?.imageButton
+        imageButton?.setImage(selectedImage?.withRenderingMode(.alwaysOriginal), for: .normal)
         dismiss(animated: true)
+        
+        let filename = UUID().uuidString
+        let ref = Storage.storage().reference(withPath: "/images/\(filename)")
+        guard let uploadData = selectedImage?.jpegData(compressionQuality: 0.75) else { return }
+        
+        let hud = JGProgressHUD(style: .dark)
+        hud.textLabel.text = "Uploading image..."
+        hud.show(in: view)
+        ref.putData(uploadData, metadata: nil) { (nil, err) in
+            if let err = err {
+                hud.dismiss()
+                print("Failed to upload image to storage: ", err)
+                return
+            }
+            
+            print("Finished uploading image")
+            ref.downloadURL(completion: { (url, err) in
+                
+                hud.dismiss()
+                
+                if let err = err {
+                    print("Failed to retrieve download URL: ", err)
+                }
+                
+                print("Finished getting downloading url: ", url?.absoluteString ?? "")
+                
+                if imageButton == self.image1Button {
+                    self.user?.imageUrl1 = url?.absoluteString
+                }else if imageButton == self.image2Button {
+                    self.user?.imageUrl2 = url?.absoluteString
+                }else {
+                    self.user?.imageUrl3 = url?.absoluteString
+                }
+                
+            })
+            
+        }
     }
 }
 
@@ -33,7 +74,8 @@ class SettingsController: UITableViewController {
     lazy var image1Button = createButton(selector: #selector(handleSelectPhoto))
     lazy var image2Button = createButton(selector: #selector(handleSelectPhoto))
     lazy var image3Button = createButton(selector: #selector(handleSelectPhoto))
-    
+    var delegate: SettingsControllerDelegation?
+
     @objc fileprivate func handleSelectPhoto(button: UIButton) {
         let picker = CustomImagePickerController()
         picker.delegate = self
@@ -77,6 +119,7 @@ class SettingsController: UITableViewController {
         tableView.backgroundColor = UIColor(white: 0.95, alpha: 1)
         tableView.tableHeaderView = UIView()
         tableView.keyboardDismissMode = .interactive
+        tableView.tableFooterView = UIView()
         
         fetchCurrentUser()
     }
@@ -100,11 +143,21 @@ class SettingsController: UITableViewController {
     }
     
     fileprivate func loadUserPhoto() {
-        guard let imageUrl = user?.imageUrl1, let url = URL(string: imageUrl) else { return }
-        SDWebImageManager.shared().loadImage(with: url, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
-            self.image1Button.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
+        if let imageUrl = user?.imageUrl1, let url = URL(string: imageUrl)  {
+            SDWebImageManager.shared().loadImage(with: url, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+                self.image1Button.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
+            }
         }
-        self.user?.imageUrl1
+        if let imageUrl = user?.imageUrl2, let url = URL(string: imageUrl)  {
+            SDWebImageManager.shared().loadImage(with: url, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+                self.image2Button.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
+            }
+        }
+        if let imageUrl = user?.imageUrl3, let url = URL(string: imageUrl)  {
+            SDWebImageManager.shared().loadImage(with: url, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+                self.image3Button.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
+            }
+        }
     }
     
     
@@ -127,9 +180,12 @@ class SettingsController: UITableViewController {
             label.text = "Profession"
         case 3:
             label.text = "Age"
-        default:
+        case 4:
             label.text = "Bio"
+        default:
+            label.text = "Seeking Age Range"
         }
+        label.font = UIFont.boldSystemFont(ofSize: 14)
         return label
     }
     
@@ -141,15 +197,56 @@ class SettingsController: UITableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return 6
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return section == 0 ? 0 : 1
     }
     
+    @objc fileprivate func handleMinAgeChange(slider: UISlider) {
+//        let indexPath = IndexPath(row: 0, section: 5)
+//        let ageRangeCell = tableView.cellForRow(at: indexPath) as! AgeRangeViewCell
+//        ageRangeCell.minLabel.text = "Min: \(Int(slider.value))"
+//        self.user?.minSeekingAge = Int(slider.value)
+        evaluateMinMax()
+    }
+    
+    
+    @objc fileprivate func handleMaxAgeChange(slider: UISlider) {
+//        let indexPath = IndexPath(row: 0, section: 5)
+//        let ageRangeCell = tableView.cellForRow(at: indexPath) as! AgeRangeViewCell
+//        ageRangeCell.maxLabel.text = "Max: \(Int(slider.value))"
+//        self.user?.maxSeekingAge = Int(slider.value)
+        evaluateMinMax()
+    }
+    
+    fileprivate func evaluateMinMax() {
+        guard let ageRangeCell = tableView.cellForRow(at: [5, 0]) as? AgeRangeViewCell else { return }
+        let minValue = Int(ageRangeCell.minSlider.value)
+        var maxValue = Int(ageRangeCell.maxSlider.value)
+        maxValue = max(minValue, maxValue)
+        ageRangeCell.maxSlider.value = Float(maxValue)
+        ageRangeCell.minLabel.text = "Min: \(minValue)"
+        ageRangeCell.maxLabel.text = "Max: \(maxValue)"
+        
+        user?.minSeekingAge = minValue
+        user?.maxSeekingAge = maxValue
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = SettingsCell(style: .default, reuseIdentifier: nil)
+        if indexPath.section == 5 {
+            let ageRangeCell = AgeRangeViewCell(style: .default, reuseIdentifier: nil)
+            ageRangeCell.minSlider.addTarget(self, action: #selector(handleMinAgeChange), for: .valueChanged)
+            ageRangeCell.maxSlider.addTarget(self, action: #selector(handleMaxAgeChange), for: .valueChanged)
+            
+            ageRangeCell.minLabel.text = "Min: \(user?.minSeekingAge ?? -1)"
+            ageRangeCell.maxLabel.text = "Min: \(user?.maxSeekingAge ?? -1)"
+            ageRangeCell.minSlider.value = Float(user?.minSeekingAge ?? -1)
+            ageRangeCell.maxSlider.value = Float(user?.maxSeekingAge ?? -1)
+            return ageRangeCell
+        }
         
         switch indexPath.section {
         case 1:
@@ -200,8 +297,12 @@ class SettingsController: UITableViewController {
             "uid": uid,
             "fullName": user?.name ?? "",
             "imageUrl1": user?.imageUrl1 ?? "",
+            "imageUrl2": user?.imageUrl2 ?? "",
+            "imageUrl3": user?.imageUrl3 ?? "",
             "age": user?.age ?? -1,
-            "profession": user?.profession ?? ""
+            "profession": user?.profession ?? "",
+            "minSeekingAge": user?.minSeekingAge ?? -1,
+            "maxSeekingAge": user?.maxSeekingAge ?? -1,
         ]
         
         let hud = JGProgressHUD(style: .dark)
@@ -216,6 +317,9 @@ class SettingsController: UITableViewController {
             }
             
             print("Finished saving user info")
+            self.dismiss(animated: true, completion: {
+                self.delegate?.didSaveSettings()
+            })
         }
     }
     
