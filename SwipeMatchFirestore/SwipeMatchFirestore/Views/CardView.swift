@@ -9,8 +9,14 @@
 import UIKit
 import SDWebImage
 
+protocol CardViewDelegate {
+    func didTapMoreInfo()
+}
+
 class CardView: UIView {
 
+    var delegate: CardViewDelegate?
+    
     var cardViewModel: CardViewModel! {
         didSet {
             // accessing index 0 will crash if imageName.count == 0
@@ -92,6 +98,24 @@ class CardView: UIView {
         gradientLayer.frame = self.frame
     }
     
+    fileprivate let moreInfoButton: UIButton = {
+       let button = UIButton(type: .system)
+        button.setImage(#imageLiteral(resourceName: "info-xxl").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(handleMoreInfo), for: .touchUpInside)
+        return button
+    }()
+    
+    @objc fileprivate func handleMoreInfo() {
+        delegate?.didTapMoreInfo()
+        
+        //hack solution
+//        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+//        let userDetailController = UIViewController()
+//        userDetailController.view.backgroundColor = .yellow
+//        rootViewController?.present(userDetailController, animated: true, completion: nil)
+        
+    }
+    
     fileprivate func setupLayout() {
         layer.cornerRadius = 15
         clipsToBounds = true
@@ -110,6 +134,9 @@ class CardView: UIView {
         
         informationLabel.textColor = UIColor.white
         informationLabel.numberOfLines = 0
+        
+        addSubview(moreInfoButton)
+        moreInfoButton.anchor(top: nil, leading: nil, bottom: bottomAnchor, trailing: trailingAnchor, padding: .init(top: 0, left: 0, bottom: 16, right: 16), size: .init(width: 44, height: 44))
     }
     
     fileprivate let barsStackView = UIStackView()

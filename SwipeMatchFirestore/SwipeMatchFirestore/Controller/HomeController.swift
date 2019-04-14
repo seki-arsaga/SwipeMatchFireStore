@@ -11,7 +11,7 @@ import FirebaseFirestore
 import FirebaseAuth
 import JGProgressHUD
 
-class HomeController: UIViewController {
+class HomeController: UIViewController, LoginControllerDelegate, CardViewDelegate {
 
     let topStackView = TopNavigationStackViews()
     let cardDeckView = UIView()
@@ -27,6 +27,23 @@ class HomeController: UIViewController {
         setupLayout()
         fetchCurrentUser()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("HomeController did appear")
+        
+        if Auth.auth().currentUser == nil {
+            let loginController = LoginController()
+            loginController.delegate = self
+            let navController = UINavigationController(rootViewController: loginController)
+            present(navController, animated: true, completion: nil)
+        }
+    }
+    
+    func didFinishLoggingIn() {
+        fetchCurrentUser()
+    }
+    
     
     fileprivate var user: User?
     
@@ -57,7 +74,6 @@ class HomeController: UIViewController {
         hud.show(in: view)
         
         let query = Firestore.firestore().collection("users").whereField("age", isGreaterThan: minAge).whereField("age", isLessThan: maxAge)
-//            .order(by: "uid").start(after: [lastFetchedUser?.uid ?? ""]).limit(to: 2)
         query.getDocuments { (snapshot, err) in
             hud.dismiss()
             if let err = err {
@@ -68,19 +84,27 @@ class HomeController: UIViewController {
             snapshot?.documents.forEach({ (documentSnapshot) in
                 let userDictionary = documentSnapshot.data()
                 let user = User(dictionary: userDictionary)
-                self.cardViewModels.append(user.toCardViewModel())
-                self.lastFetchedUser = user
-                self.setupCardFromUser(user: user)
+                if user.uid != Auth.auth().currentUser?.uid {
+                    self.setupCardFromUser(user: user)
+                }
+//                self.cardViewModels.append(user.toCardViewModel())
+//                self.lastFetchedUser = user
             })
         }
     }
     
     fileprivate func setupCardFromUser(user: User) {
         let cardView = CardView(frame: .zero)
+        cardView.delegate = self
         cardView.cardViewModel = user.toCardViewModel()
         cardDeckView.addSubview(cardView)
         cardDeckView.sendSubviewToBack(cardView)
         cardView.fillSuperview()
+    }
+    
+    func didTapMoreInfo() {
+        let userDetailController = UserDetailsController()
+        present(userDetailController, animated: true, completion: nil)
     }
     
     @objc func handleSettings() {
