@@ -15,6 +15,12 @@
 		52AAA185226313A80029BBFA /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AAA183226313A70029BBFA /* LoginController.swift */; };
 		52AAA186226313A80029BBFA /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AAA184226313A80029BBFA /* LoginViewModel.swift */; };
 		52AAA18922636E830029BBFA /* UserDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AAA18822636E830029BBFA /* UserDetailsController.swift */; };
+		52AAA18B226448AA0029BBFA /* SwipingPhotosController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AAA18A226448AA0029BBFA /* SwipingPhotosController.swift */; };
+		52AAA18D22646EBE0029BBFA /* PhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AAA18C22646EBE0029BBFA /* PhotoController.swift */; };
+		52AAA18F22648E8A0029BBFA /* Firebase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AAA18E22648E8A0029BBFA /* Firebase+Utils.swift */; };
+		52AAA1912264950D0029BBFA /* MatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AAA1902264950D0029BBFA /* MatchView.swift */; };
+		52AAA1932264A1D50029BBFA /* SendMessageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AAA1922264A1D50029BBFA /* SendMessageButton.swift */; };
+		52AAA1952264A4C10029BBFA /* KeepSwipingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AAA1942264A4C10029BBFA /* KeepSwipingButton.swift */; };
 		52DC37CD223D2CFA0044948B /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DC37CC223D2CFA0044948B /* Advertiser.swift */; };
 		52DC37CF2243AFE80044948B /* RegistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DC37CE2243AFE80044948B /* RegistrationController.swift */; };
 		52DC37D12243B5B50044948B /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DC37D02243B5B50044948B /* CustomTextField.swift */; };
@@ -64,6 +70,12 @@
 		52AAA183226313A70029BBFA /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		52AAA184226313A80029BBFA /* LoginViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		52AAA18822636E830029BBFA /* UserDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsController.swift; sourceTree = "<group>"; };
+		52AAA18A226448AA0029BBFA /* SwipingPhotosController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipingPhotosController.swift; sourceTree = "<group>"; };
+		52AAA18C22646EBE0029BBFA /* PhotoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoController.swift; sourceTree = "<group>"; };
+		52AAA18E22648E8A0029BBFA /* Firebase+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Firebase+Utils.swift"; sourceTree = "<group>"; };
+		52AAA1902264950D0029BBFA /* MatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchView.swift; sourceTree = "<group>"; };
+		52AAA1922264A1D50029BBFA /* SendMessageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageButton.swift; sourceTree = "<group>"; };
+		52AAA1942264A4C10029BBFA /* KeepSwipingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepSwipingButton.swift; sourceTree = "<group>"; };
 		52DC37CC223D2CFA0044948B /* Advertiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertiser.swift; sourceTree = "<group>"; };
 		52DC37CE2243AFE80044948B /* RegistrationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationController.swift; sourceTree = "<group>"; };
 		52DC37D02243B5B50044948B /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
@@ -132,6 +144,8 @@
 			isa = PBXGroup;
 			children = (
 				52AAA18822636E830029BBFA /* UserDetailsController.swift */,
+				52AAA18A226448AA0029BBFA /* SwipingPhotosController.swift */,
+				52AAA18C22646EBE0029BBFA /* PhotoController.swift */,
 			);
 			path = UserDetails;
 			sourceTree = "<group>";
@@ -199,6 +213,7 @@
 			children = (
 				52FC37F4222D8EF900577200 /* UIColor-Ext.swift */,
 				52FC37F2222D8EF200577200 /* UIView-Ext.swift */,
+				52AAA18E22648E8A0029BBFA /* Firebase+Utils.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -226,6 +241,9 @@
 				52DC37D02243B5B50044948B /* CustomTextField.swift */,
 				522F90BD224D1BE40029E041 /* SettingsCell.swift */,
 				522F90BF224E7C580029E041 /* AgeRangeViewCell.swift */,
+				52AAA1902264950D0029BBFA /* MatchView.swift */,
+				52AAA1922264A1D50029BBFA /* SendMessageButton.swift */,
+				52AAA1942264A4C10029BBFA /* KeepSwipingButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -443,14 +461,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				52DC37CD223D2CFA0044948B /* Advertiser.swift in Sources */,
+				52AAA18F22648E8A0029BBFA /* Firebase+Utils.swift in Sources */,
 				52FC37FD2230325900577200 /* CardView.swift in Sources */,
 				52FC37F3222D8EF200577200 /* UIView-Ext.swift in Sources */,
+				52AAA1932264A1D50029BBFA /* SendMessageButton.swift in Sources */,
 				52FC37FB22302C3A00577200 /* TopNavigationStackViews.swift in Sources */,
 				52FC37C5222D8C5300577200 /* HomeController.swift in Sources */,
 				52FC3800223541BE00577200 /* User.swift in Sources */,
 				522F90BC224D11520029E041 /* SettingsController.swift in Sources */,
 				52AAA18922636E830029BBFA /* UserDetailsController.swift in Sources */,
 				52DC37CF2243AFE80044948B /* RegistrationController.swift in Sources */,
+				52AAA1912264950D0029BBFA /* MatchView.swift in Sources */,
 				52FC37F92230278800577200 /* HomeBottomControlsStackView.swift in Sources */,
 				522F90BA224A7C120029E041 /* Bindable.swift in Sources */,
 				52DC37D12243B5B50044948B /* CustomTextField.swift in Sources */,
@@ -458,10 +479,13 @@
 				52FC37C3222D8C5300577200 /* AppDelegate.swift in Sources */,
 				52AAA185226313A80029BBFA /* LoginController.swift in Sources */,
 				52FC37F5222D8EF900577200 /* UIColor-Ext.swift in Sources */,
+				52AAA18D22646EBE0029BBFA /* PhotoController.swift in Sources */,
 				522F90C0224E7C580029E041 /* AgeRangeViewCell.swift in Sources */,
 				522F90BE224D1BE40029E041 /* SettingsCell.swift in Sources */,
+				52AAA1952264A4C10029BBFA /* KeepSwipingButton.swift in Sources */,
 				52AAA186226313A80029BBFA /* LoginViewModel.swift in Sources */,
 				52FC38032236CA4100577200 /* CardViewModel.swift in Sources */,
+				52AAA18B226448AA0029BBFA /* SwipingPhotosController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

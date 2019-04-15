@@ -10,26 +10,22 @@ import UIKit
 import SDWebImage
 
 protocol CardViewDelegate {
-    func didTapMoreInfo()
+    func didTapMoreInfo(cardViewModel: CardViewModel)
+    func didRemoveCard(cardView: CardView)
 }
 
 class CardView: UIView {
 
+    var nextCardView: CardView?
     var delegate: CardViewDelegate?
-    
     var cardViewModel: CardViewModel! {
         didSet {
-            // accessing index 0 will crash if imageName.count == 0
-            let imageName = cardViewModel.imageNames.first ?? ""
-//            imageView.image = UIImage(named: imageName)
-            if let url = URL(string: imageName) {
-                imageView.sd_setImage(with: url)
-            }
+            swipingPhotoController.cardViewModel = self.cardViewModel
             
             informationLabel.attributedText = cardViewModel.attributedString
             informationLabel.textAlignment = cardViewModel.textAlignment
             
-            (0..<cardViewModel.imageNames.count).forEach { (_) in
+            (0..<cardViewModel.imageUrls.count).forEach { (_) in
                 let barView = UIView()
                 barView.backgroundColor = UIColor(white: 0, alpha: 0.1)
                 barsStackView.addArrangedSubview(barView)
@@ -43,9 +39,9 @@ class CardView: UIView {
     fileprivate func setupImageIndexObserver() {
         cardViewModel.imageIndexObserver = { [weak self] (idx, imageUrl) in
             print("Changing photo from view model")
-            if let url = URL(string: imageUrl ?? "") {
-                self?.imageView.sd_setImage(with: url)
-            }
+//            if let url = URL(string: imageUrl ?? "") {
+//                self?.imageView.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "question-mark-xxl"), options: .continueInBackground, completed: nil)
+//            }
             
             self?.barsStackView.arrangedSubviews.forEach({ (v) in
                 v.backgroundColor = self?.barUnselectedColor
@@ -55,7 +51,8 @@ class CardView: UIView {
     }
     
     //encapsulation
-    fileprivate let imageView = UIImageView(image: #imageLiteral(resourceName: "curry_image-1"))
+    fileprivate let swipingPhotoController = SwipingPhotosController(isCardViewModel: true)
+//    fileprivate let imageView = UIImageView(image: #imageLiteral(resourceName: "curry_image-1"))
     fileprivate let gradientLayer = CAGradientLayer()
     fileprivate let informationLabel = UILabel()
     
@@ -106,25 +103,19 @@ class CardView: UIView {
     }()
     
     @objc fileprivate func handleMoreInfo() {
-        delegate?.didTapMoreInfo()
-        
-        //hack solution
-//        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-//        let userDetailController = UIViewController()
-//        userDetailController.view.backgroundColor = .yellow
-//        rootViewController?.present(userDetailController, animated: true, completion: nil)
-        
+        delegate?.didTapMoreInfo(cardViewModel: cardViewModel)
     }
     
     fileprivate func setupLayout() {
         layer.cornerRadius = 15
         clipsToBounds = true
         
-        imageView.contentMode = .scaleAspectFill
-        addSubview(imageView)
-        imageView.fillSuperview()
+        let swipingPhotoView = swipingPhotoController.view!
         
-        setupBarsStackView()
+        addSubview(swipingPhotoView)
+        swipingPhotoView.fillSuperview()
+        
+//        setupBarsStackView()
         
         //add a gradient layer somehow
         setupGradientLayer()
@@ -176,18 +167,19 @@ class CardView: UIView {
         let translationDirection: CGFloat = gesture.translation(in: nil).x > 0 ? 1 : -1
         let shouldDismissCard = abs(gesture.translation(in: nil).x) > threshold
         
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.1, options: .curveEaseOut, animations: {
-            if shouldDismissCard {
-                self.frame = CGRect(x: 600 * translationDirection, y: 0, width: self.frame.width, height: self.frame.height)
-                
-            }else {
+        if shouldDismissCard {
+            // hack solution
+            guard let homeController = self.delegate as? HomeController else { return }
+            
+            if translationDirection == 1 {
+                homeController.handleLike()
+            } else {
+                homeController.handleDislike()
+            }
+        } else {
+            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.1, options: .curveEaseOut, animations: {
                 self.transform = .identity
-            }
-        }) { (_) in
-            self.transform = .identity
-            if shouldDismissCard {
-                self.removeFromSuperview()
-            }
+            })
         }
     }
     

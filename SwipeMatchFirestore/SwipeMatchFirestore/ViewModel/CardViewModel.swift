@@ -14,19 +14,21 @@ protocol ProducesCardViewModel {
 
 class CardViewModel {
     
-    let imageNames: [String]
+    let uid: String
+    let imageUrls: [String]
     let attributedString: NSAttributedString
     let textAlignment: NSTextAlignment
     
-    init(imageNames: [String], attributedString: NSAttributedString, textAlignment: NSTextAlignment) {
-        self.imageNames = imageNames
+    init(uid: String, imageNames: [String], attributedString: NSAttributedString, textAlignment: NSTextAlignment) {
+        self.uid = uid
+        self.imageUrls = imageNames
         self.attributedString = attributedString
         self.textAlignment = textAlignment
     }
     
     fileprivate var imageIndex = 0 {
         didSet {
-            let imageUrl = imageNames[imageIndex]
+            let imageUrl = imageUrls[imageIndex]
             imageIndexObserver?(imageIndex, imageUrl)
         }
     }
@@ -34,7 +36,7 @@ class CardViewModel {
     var imageIndexObserver: ((Int, String?) -> ())?
     
     func advanceToNextPhoto() {
-        imageIndex = min(imageIndex + 1, imageNames.count - 1)
+        imageIndex = min(imageIndex + 1, imageUrls.count - 1)
     }
     
     func goToPreviousPhoto() {

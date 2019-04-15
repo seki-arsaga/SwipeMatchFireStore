@@ -30,6 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let homeController = HomeController()
         window?.rootViewController = homeController
+//        window?.rootViewController = SwipingPhotosController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        
         
         return true
     }

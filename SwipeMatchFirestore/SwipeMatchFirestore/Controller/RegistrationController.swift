@@ -17,6 +17,7 @@ extension RegistrationController: UIImagePickerControllerDelegate, UINavigationC
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image = info[.originalImage] as? UIImage
         registerationViewModel.bindableImage.value = image
+        registerationViewModel.checkFormValidity()
         dismiss(animated: true, completion: nil)
     }
     
@@ -97,6 +98,7 @@ class RegistrationController: UIViewController  {
                 self.showHUDWithError(error: err)
                 return
             }
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
@@ -215,8 +217,8 @@ class RegistrationController: UIViewController  {
     }()
     
     @objc fileprivate func handleGoToLogin() {
-        let loginController = LoginController()
-        navigationController?.pushViewController(loginController, animated: true)
+
+        navigationController?.popViewController(animated: true)
     }
     
     fileprivate func setupLayout() {
